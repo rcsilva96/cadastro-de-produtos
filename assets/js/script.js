@@ -2,6 +2,10 @@
 
 $("#inputPreco").mask('000.000.000.000.000,00', {reverse: true});
 
+function convertToNumber(priceFormat){
+    return priceFormat.replace(/\./g,'').replace(',', '.');
+}
+
 var products = [
   {
     id: 1,
@@ -79,7 +83,7 @@ function save(){
         id: products.length + 1,
         name: document.getElementById("inputNome").value,
         description: document.getElementById("inputDesc").value,
-        price: document.getElementById("inputPreco").value,
+        price: convertToNumber(document.getElementById("inputPreco").value),
         category: document.getElementById("selectCategoria").value,
         promotion: document.getElementById("checkBoxPromocao").checked,
         new: document.getElementById("checkBoxLancamento").checked,
@@ -114,7 +118,9 @@ function addNewRow(prod){
     //Insert product description
 
     var productDesc = document.createTextNode(prod.description);
-    newRow.insertCell().appendChild(productDesc);
+    var cell = newRow.insertCell();
+    cell.className='d-none d-md-table-cell'
+    cell.appendChild(productDesc);
 
     //Insert product price
 
@@ -133,21 +139,23 @@ function addNewRow(prod){
 
     //badges
 
-    var options = '';
+    var options = "";
 
     if(prod.promotion){
 
-        options = "<span class='badge bg-success me-1'>P</span>";
+        options = "<span class='badge bg-success me-1 d-none d-md-table-cell'>P</span>";
 
     }
 
     if(prod.new){
 
         // += because I'm adding a new badge
-        options += "<span class='badge bg-primary'>L</span>";
+        options += "<span class='badge bg-primary d-none d-md-table-cell'>L</span>";
 
     }
 
+    cell = newRow.insertCell();
+    cell.className = "d-none d-md-table-cell";
     newRow.insertCell().innerHTML = options;
 
 }
